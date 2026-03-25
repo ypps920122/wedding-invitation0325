@@ -13,241 +13,46 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@900&family=Noto+Sans+TC:wght@900&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --manga-black: #000000;
-            --manga-white: #ffffff;
-            --manga-gray: #f0f0f0;
-        }
-
-        body {
-            background-color: #333;
-            font-family: 'Noto Sans TC', sans-serif;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-        }
-
-        /* 模擬手機外框 */
-        .mobile-frame {
-            width: 100%;
-            max-width: 414px;
-            background-color: var(--manga-white);
-            min-height: 100vh;
-            border-left: 8px solid var(--manga-black);
-            border-right: 8px solid var(--manga-black);
-            position: relative;
-            overflow-x: hidden;
-            box-shadow: 0 0 50px rgba(0,0,0,0.5);
-        }
-
-        /* 網點背景效果 */
-        .dot-bg {
-            background-image: radial-gradient(var(--manga-black) 1px, transparent 1px);
-            background-size: 15px 15px;
-            background-color: rgba(0,0,0,0.03);
-        }
-
-        /* 漫畫標題粗邊框 */
-        .manga-panel {
-            border: 5px solid var(--manga-black);
-            margin: 10px;
-            background: white;
-            position: relative;
-        }
-
-        /* 擬聲詞效果 */
-        .onomatopoeia {
-            font-family: 'Noto Sans JP', sans-serif;
-            font-weight: 900;
-            font-style: italic;
-            position: absolute;
-            z-index: 10;
-            text-shadow: 4px 4px 0 white, -2px -2px 0 white, 2px -2px 0 white, -2px 2px 0 white;
-            color: black;
-            pointer-events: none;
-            line-height: 1;
-        }
-
-        /* 對話框 */
-        .speech-bubble {
-            position: relative;
-            background: #fff;
-            border: 4px solid #000;
-            border-radius: 50px;
-            padding: 20px;
-            text-align: center;
-            font-weight: 900;
-            margin: 20px;
-        }
-
-        .speech-bubble::after {
-            content: '';
-            position: absolute;
-            bottom: -15px;
-            left: 50%;
-            border-width: 15px 15px 0;
-            border-style: solid;
-            border-color: #000 transparent;
-            display: block;
-            width: 0;
-            margin-left: -15px;
-        }
-
-        /* 集中線 */
-        .focus-lines {
-            background: repeating-conic-gradient(from 0deg, #fff 0deg 2deg, #eee 2deg 4deg);
-        }
-
-        /* 自定義下拉選單 */
-        .manga-select-btn {
-            appearance: none;
-            width: 100%;
-            background-color: white;
-            border: 4px solid black;
-            padding: 15px;
-            font-weight: 900;
-            font-size: 1rem;
-            cursor: pointer;
-            outline: none;
-            transition: transform 0.1s;
-        }
-
-        .manga-select-btn:active {
-            transform: scale(0.98);
-            background-color: #f0f0f0;
-        }
-
-        .select-container {
-            position: relative;
-        }
-
-        .select-container::after {
-            content: "▼";
-            position: absolute;
-            right: 15px;
-            top: 50%;
-            transform: translateY(-50%);
-            pointer-events: none;
-            font-weight: 900;
-        }
-
-        /* 照片處理 */
-        .manga-photo {
-            filter: grayscale(100%) contrast(1.2);
-            transition: 0.3s;
-        }
-        .manga-photo:hover {
-            filter: grayscale(0%) contrast(1);
-        }
-
-        /* 賓客區塊 */
-        .guest-card {
-            border: 3px solid black;
-            padding: 10px;
-            margin-bottom: 10px;
-            box-shadow: 5px 5px 0 rgba(0,0,0,1);
-            background: white;
-        }
-
-        /* 擬聲詞脈動動畫 - 漫畫卡格感 */
-        .pulse-text {
-            animation: pulse 1.5s steps(4) infinite;
-        }
-        .pulse-text-delay {
-            animation: pulse 1.5s steps(4) infinite;
-            animation-delay: 0.5s;
-        }
-        @keyframes pulse {
-            0%, 100% { transform: rotate(-12deg) scale(1); opacity: 1; }
-            50% { transform: rotate(-12deg) scale(1.15); opacity: 0.85; }
-        }
-        .pulse-text-delay {
-            animation-name: pulse2;
-        }
-        @keyframes pulse2 {
-            0%, 100% { transform: rotate(8deg) scale(1); opacity: 1; }
-            50% { transform: rotate(8deg) scale(1.2); opacity: 0.85; }
-        }
-
-        /* 跳動愛心列 - 漫畫卡格感 */
-        .hearts-bar-static {
-            display: flex;
-            justify-content: center;
-            gap: 8px;
-            padding: 8px 0;
-            background: var(--manga-white);
-        }
-        .hearts-bar-static span {
-            color: rgba(0,0,0,0.25);
-            font-size: 8px;
-            display: inline-block;
-            animation: heartBounce 3s steps(3) infinite;
-        }
-        @keyframes heartBounce {
-            0%, 100% { transform: translateY(0) scale(1); opacity: 0.3; }
-            50% { transform: translateY(-3px) scale(1.1); opacity: 0.6; }
-        }
-
-        /* 照片輪播 */
-        .photo-carousel {
-            overflow-x: auto;
-            scroll-snap-type: x mandatory;
-            -webkit-overflow-scrolling: touch;
-            scrollbar-width: none;
-            display: flex;
-            gap: 0;
-            border: 4px solid black;
-        }
+        :root { --manga-black: #000000; --manga-white: #ffffff; --manga-gray: #f0f0f0; }
+        body { background-color: #333; font-family: 'Noto Sans TC', sans-serif; margin: 0; padding: 0; display: flex; justify-content: center; }
+        .mobile-frame { width: 100%; max-width: 414px; background-color: var(--manga-white); min-height: 100vh; border-left: 8px solid var(--manga-black); border-right: 8px solid var(--manga-black); position: relative; overflow-x: hidden; box-shadow: 0 0 50px rgba(0,0,0,0.5); }
+        .dot-bg { background-image: radial-gradient(var(--manga-black) 1px, transparent 1px); background-size: 15px 15px; background-color: rgba(0,0,0,0.03); }
+        .manga-panel { border: 5px solid var(--manga-black); margin: 10px; background: white; position: relative; }
+        .onomatopoeia { font-family: 'Noto Sans JP', sans-serif; font-weight: 900; font-style: italic; position: absolute; z-index: 10; text-shadow: 4px 4px 0 white, -2px -2px 0 white, 2px -2px 0 white, -2px 2px 0 white; color: black; pointer-events: none; line-height: 1; }
+        .focus-lines { background: repeating-conic-gradient(from 0deg, #fff 0deg 2deg, #eee 2deg 4deg); }
+        .manga-select-btn { appearance: none; width: 100%; background-color: white; border: 4px solid black; padding: 15px; font-weight: 900; font-size: 1rem; cursor: pointer; outline: none; transition: transform 0.1s; }
+        .manga-select-btn:active { transform: scale(0.98); background-color: #f0f0f0; }
+        .select-container { position: relative; }
+        .select-container::after { content: "▼"; position: absolute; right: 15px; top: 50%; transform: translateY(-50%); pointer-events: none; font-weight: 900; }
+        .guest-card { border: 3px solid black; padding: 10px; margin-bottom: 10px; box-shadow: 5px 5px 0 rgba(0,0,0,1); background: white; }
+        .pulse-text { animation: pulse 1.5s steps(4) infinite; }
+        .pulse-text-delay { animation: pulse2 1.5s steps(4) infinite; animation-delay: 0.5s; }
+        @keyframes pulse { 0%, 100% { transform: rotate(-12deg) scale(1); opacity: 1; } 50% { transform: rotate(-12deg) scale(1.15); opacity: 0.85; } }
+        @keyframes pulse2 { 0%, 100% { transform: rotate(8deg) scale(1); opacity: 1; } 50% { transform: rotate(8deg) scale(1.2); opacity: 0.85; } }
+        .hearts-bar-static { display: flex; justify-content: center; gap: 8px; padding: 8px 0; background: var(--manga-white); }
+        .hearts-bar-static span { color: rgba(0,0,0,0.25); font-size: 8px; display: inline-block; animation: heartBounce 3s steps(3) infinite; }
+        @keyframes heartBounce { 0%, 100% { transform: translateY(0) scale(1); opacity: 0.3; } 50% { transform: translateY(-3px) scale(1.1); opacity: 0.6; } }
+        .photo-carousel { overflow-x: auto; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; scrollbar-width: none; display: flex; gap: 0; border: 4px solid black; }
         .photo-carousel::-webkit-scrollbar { display: none; }
-        .photo-carousel img {
-            scroll-snap-align: center;
-            flex: 0 0 100%;
-            width: 100%;
-            aspect-ratio: 4 / 6;
-            object-fit: cover;
-        }
-        .carousel-dots {
-            display: flex;
-            justify-content: center;
-            gap: 8px;
-            margin-top: 10px;
-        }
-        .carousel-dots span {
-            width: 10px;
-            height: 10px;
-            background: #ccc;
-            border: 2px solid black;
-            cursor: pointer;
-            transition: background 0.2s;
-        }
-        .carousel-dots span.active {
-            background: black;
-        }
+        .photo-carousel img { scroll-snap-align: center; flex: 0 0 100%; width: 100%; aspect-ratio: 4 / 6; object-fit: cover; }
+        .carousel-dots { display: flex; justify-content: center; gap: 8px; margin-top: 10px; }
+        .carousel-dots span { width: 10px; height: 10px; background: #ccc; border: 2px solid black; cursor: pointer; transition: background 0.2s; }
+        .carousel-dots span.active { background: black; }
     </style>
 </head>
 <body class="dot-bg">
-
     <div class="mobile-frame">
-        <!-- 封面區域 -->
-        <section class="relative overflow-hidden pt-8 pb-4 focus-lines">
+
+        <!-- 封面 -->
+        <section class="relative overflow-hidden pt-12 pb-8 focus-lines">
+            <div class="onomatopoeia text-6xl top-4 -left-2 rotate-[-15deg] pulse-text">ドキドキ</div>
+            <div class="onomatopoeia text-4xl top-20 right-2 rotate-[10deg] pulse-text-delay">キュン</div>
             <div class="text-center relative z-10 px-4">
                 <div class="inline-block border-4 border-black p-2 bg-white mb-4">
                     <p class="text-xs font-black tracking-widest italic uppercase">Wedding Invitation</p>
                 </div>
                 <h1 class="text-4xl font-black mb-3">張育安 × 許雯</h1>
-                <p class="text-xs font-bold text-gray-500 tracking-widest mb-2">YU-AN CHANG &ensp;×&ensp; WEN HSU</p>
-            </div>
-        </section>
-
-        <!-- 漫畫格子照片 -->
-        <section class="relative">
-            <img src="O60A5405.jpg" alt="" class="w-full block">
-            <div class="onomatopoeia text-5xl top-4 left-3 rotate-[-12deg] pulse-text">ドキドキ</div>
-            <div class="onomatopoeia text-3xl top-16 right-3 rotate-[8deg] pulse-text-delay">キュン</div>
-            
-            <!-- 日期資訊 -->
-            <div style="position:absolute;bottom:0;left:0;right:0;text-align:center;padding:10px 0;background:linear-gradient(transparent, rgba(0,0,0,0.6));">
+                <p class="text-xs font-bold text-gray-500 tracking-widest mb-4">YU-AN CHANG &ensp;×&ensp; WEN HSU</p>
                 <div class="bg-black text-white inline-block px-4 py-2 font-black italic">
                     <span class="text-xl">2027.01.31 (SUN)</span>
                     <span class="text-sm ml-2">午宴</span>
@@ -256,23 +61,17 @@
             </div>
         </section>
 
-        <!-- 跳動愛心 -->
+        <!-- 主照片 -->
+        <section class="relative">
+            <img src="O60A5405.jpg" alt="" class="w-full block">
+        </section>
+
+        <!-- 愛心 -->
         <div class="hearts-bar-static">
-            <span style="animation-delay:0s">♥</span>
-            <span style="animation-delay:0.15s">♥</span>
-            <span style="animation-delay:0.3s">♥</span>
-            <span style="animation-delay:0.45s">♥</span>
-            <span style="animation-delay:0.6s">♥</span>
-            <span style="animation-delay:0.75s">♥</span>
-            <span style="animation-delay:0.9s">♥</span>
-            <span style="animation-delay:1.05s">♥</span>
-            <span style="animation-delay:1.2s">♥</span>
-            <span style="animation-delay:1.35s">♥</span>
-            <span style="animation-delay:1.5s">♥</span>
-            <span style="animation-delay:1.65s">♥</span>
+            <span style="animation-delay:0s">♥</span><span style="animation-delay:0.15s">♥</span><span style="animation-delay:0.3s">♥</span><span style="animation-delay:0.45s">♥</span><span style="animation-delay:0.6s">♥</span><span style="animation-delay:0.75s">♥</span><span style="animation-delay:0.9s">♥</span><span style="animation-delay:1.05s">♥</span><span style="animation-delay:1.2s">♥</span><span style="animation-delay:1.35s">♥</span><span style="animation-delay:1.5s">♥</span><span style="animation-delay:1.65s">♥</span>
         </div>
 
-        <!-- 地點資訊 -->
+        <!-- 地點 -->
         <section class="p-6">
             <div class="manga-panel p-6 shadow-[10px_10px_0_black]">
                 <h2 class="text-2xl font-black mb-1 underline decoration-4 underline-offset-4 italic">地點</h2>
@@ -283,47 +82,33 @@
                     <p class="text-xs text-gray-400">(典華後方大木門)</p>
                     <a href="https://maps.app.goo.gl/2PpvpmS51fFe2QeDA" target="_blank" class="block mt-4 border-4 border-black overflow-hidden">
                         <img src="map.jpg" alt="" class="w-full block">
-                        <div class="bg-black text-white text-center py-3 hover:bg-white hover:text-black transition duration-200">
-                            查看地圖 <span class="text-xs opacity-70">MAP</span>
-                        </div>
+                        <div class="bg-black text-white text-center py-3 hover:bg-white hover:text-black transition duration-200">查看地圖 <span class="text-xs opacity-70">MAP</span></div>
                     </a>
                 </div>
             </div>
         </section>
 
-        <!-- 照片輪播區 -->
+        <!-- 照片輪播 -->
         <section class="p-6 relative">
             <div class="onomatopoeia text-lg top-2 right-8 rotate-[12deg] opacity-30" style="text-shadow:none;">キラキラ</div>
             <div class="onomatopoeia text-lg bottom-8 left-4 rotate-[-10deg] opacity-25" style="text-shadow:none;">ジャーン</div>
             <div class="relative">
                 <div class="photo-carousel" id="photoCarousel">
-                    <img src="O60A5243.jpg" alt="">
-                    <img src="O60A5258-編輯.jpg" alt="">
-                    <img src="O60A5433.jpg" alt="">
-                    <img src="O60A6899.jpg" alt="">
-                    <img src="O60A5501.jpg" alt="">
-                    <img src="O60A5521.jpg" alt="">
-                    <img src="O60A5525.jpg" alt="">
-                    <img src="O60A6901.jpg" alt="">
-                    <img src="O60A5567.jpg" alt="">
-                    <img src="O60A5579.jpg" alt="">
-                    <img src="O60A5721-編輯.jpg" alt="">
+                    <img src="O60A5243.jpg" alt=""><img src="O60A5258-編輯.jpg" alt=""><img src="O60A5433.jpg" alt=""><img src="O60A6899.jpg" alt=""><img src="O60A5501.jpg" alt=""><img src="O60A5521.jpg" alt=""><img src="O60A5525.jpg" alt=""><img src="O60A6901.jpg" alt=""><img src="O60A5567.jpg" alt=""><img src="O60A5579.jpg" alt=""><img src="O60A5721-編輯.jpg" alt="">
                 </div>
                 <div class="carousel-dots" id="carouselDots"></div>
             </div>
         </section>
 
-        <!-- 調查問卷區 -->
+        <!-- 出席調查 -->
         <section class="p-6 bg-gray-50 relative">
-            <div class="onomatopoeia text-base top-4 right-6 rotate-[10deg] opacity-20">わくわく</div>
+            <div class="onomatopoeia text-base top-4 right-6 rotate-[10deg] opacity-20" style="text-shadow:none;">わくわく</div>
             <div class="flex items-center gap-2 mb-1">
                 <div class="h-10 w-3 bg-black"></div>
                 <h2 class="text-3xl font-black italic">出席調查</h2>
             </div>
             <p class="text-[10px] text-gray-400 font-bold mb-6 tracking-wider ml-5">RSVP</p>
-
             <form id="rsvpForm" class="space-y-8">
-                <!-- 出席狀態 -->
                 <div class="grid grid-cols-2 gap-3">
                     <label class="cursor-pointer">
                         <input type="radio" name="attending" value="yes" checked class="hidden peer">
@@ -338,32 +123,17 @@
                         </div>
                     </label>
                 </div>
-
                 <div id="attendingContent" class="space-y-6">
-                    <!-- 人數選擇 -->
                     <div>
                         <label class="block font-black mb-1 text-lg italic">出席人數</label>
                         <p class="text-[10px] text-gray-400 font-bold mb-2 tracking-wider">TOTAL GUESTS</p>
                         <div class="select-container">
                             <select id="guestCount" class="manga-select-btn">
-                                <option value="1">1 位</option>
-                                <option value="2">2 位</option>
-                                <option value="3">3 位</option>
-                                <option value="4">4 位</option>
-                                <option value="5">5 位</option>
-                                <option value="6">6 位</option>
-                                <option value="7">7 位</option>
-                                <option value="8">8 位</option>
-                                <option value="9">9 位</option>
-                                <option value="10">10 位</option>
+                                <option value="1">1 位</option><option value="2">2 位</option><option value="3">3 位</option><option value="4">4 位</option><option value="5">5 位</option><option value="6">6 位</option><option value="7">7 位</option><option value="8">8 位</option><option value="9">9 位</option><option value="10">10 位</option>
                             </select>
                         </div>
                     </div>
-
-                    <!-- 賓客資料動態生成 -->
                     <div id="guestList"></div>
-
-                    <!-- 停車位 -->
                     <div>
                         <label class="flex items-center gap-3 cursor-pointer" onclick="toggleParking()">
                             <div id="parkingBox" class="w-8 h-8 border-4 border-black flex items-center justify-center transition text-lg font-black"></div>
@@ -373,16 +143,12 @@
                         </label>
                     </div>
                 </div>
-
                 <div class="space-y-6">
-                    <!-- 備註 -->
                     <div>
                         <label class="block font-black mb-1 text-lg italic">給我們的話</label>
                         <p class="text-[10px] text-gray-400 font-bold mb-2 tracking-wider">MESSAGE</p>
                         <textarea rows="4" placeholder="有什麼想說的嗎？" class="w-full border-4 border-black p-4 font-black outline-none focus:bg-yellow-50"></textarea>
                     </div>
-
-                    <!-- 上傳照片/影片 -->
                     <div>
                         <label class="block font-black mb-1 text-lg italic">分享照片或影片</label>
                         <p class="text-[10px] text-gray-400 font-bold mb-2 tracking-wider">SHARE PHOTOS & VIDEOS</p>
@@ -398,28 +164,20 @@
                         <div id="filePreview" class="mt-3 flex flex-wrap gap-2"></div>
                     </div>
                 </div>
-
-                <!-- 提交按鈕 -->
-                <button type="button" onclick="submitRSVP()" class="w-full bg-black text-white py-3 text-base font-black italic border-3 border-black hover:bg-white hover:text-black transition-all active:translate-x-1 active:translate-y-1" style="border-width:3px;">
+                <button type="button" onclick="submitRSVP()" class="w-full bg-black text-white py-3 text-base font-black italic hover:bg-white hover:text-black transition-all active:translate-x-1 active:translate-y-1" style="border:3px solid black;">
                     提交回覆 <span class="text-xs opacity-70">SEND</span>
                 </button>
             </form>
         </section>
 
-        <!-- 提示訊息 -->
+        <!-- 提示 -->
         <section class="px-6 py-8 border-t-4 border-dashed border-gray-300 text-center relative">
-            <div class="onomatopoeia text-sm top-2 left-4 rotate-[-5deg] opacity-20">パチパチ</div>
-            <p class="font-black text-xs text-gray-500 leading-relaxed">
-                ✦ 婚禮前兩週，我們會再寄出詳細的婚禮流程與當日資訊，<br>
-                並與各位確認最終的餐點選擇，届時再請留意通知喔！✦
-            </p>
-            <p class="text-[9px] text-gray-400 font-bold mt-2 leading-relaxed">
-                Two weeks before the wedding, we'll send out the detailed schedule<br>
-                and confirm your meal selections. Stay tuned!
-            </p>
+            <div class="onomatopoeia text-sm top-2 left-4 rotate-[-5deg] opacity-20" style="text-shadow:none;">パチパチ</div>
+            <p class="font-black text-xs text-gray-500 leading-relaxed">✦ 婚禮前兩週，我們會再寄出詳細的婚禮流程與當日資訊，<br>並與各位確認最終的餐點選擇，届時再請留意通知喔！✦</p>
+            <p class="text-[9px] text-gray-400 font-bold mt-2 leading-relaxed">Two weeks before the wedding, we'll send out the detailed schedule<br>and confirm your meal selections. Stay tuned!</p>
         </section>
 
-        <!-- 結尾頁腳 -->
+        <!-- 頁腳 -->
         <footer class="bg-black text-white p-12 text-center relative overflow-hidden">
             <div class="onomatopoeia text-white opacity-20 text-3xl right-4 bottom-12" style="text-shadow:none;">つづく</div>
             <p class="text-xs tracking-[0.5em] mb-4 italic">TO BE CONTINUED</p>
@@ -427,123 +185,79 @@
             <p class="mt-8 text-[10px] opacity-50 font-bold uppercase italic tracking-widest">© 2027 The Wedding Archive</p>
         </footer>
 
-        <!-- 音樂播放器 -->
-        <audio id="bgMusic" loop preload="auto">
-            <source src="桑田佳祐--明日晴れるかなfull-ver.mp3" type="audio/mpeg">
-        </audio>
-        <button id="musicBtn" onclick="toggleMusic()" style="
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            width: 44px;
-            height: 44px;
-            border-radius: 50%;
-            background: black;
-            color: white;
-            border: 3px solid white;
-            font-size: 18px;
-            cursor: pointer;
-            z-index: 100;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.5);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        ">♪</button>
+        <!-- 音樂 -->
+        <audio id="bgMusic" loop preload="auto"><source src="桑田佳祐--明日晴れるかなfull-ver.mp3" type="audio/mpeg"></audio>
+        <button id="musicBtn" onclick="toggleMusic()" style="position:fixed;bottom:20px;right:20px;width:44px;height:44px;border-radius:50%;background:black;color:white;border:3px solid white;font-size:18px;cursor:pointer;z-index:100;box-shadow:0 2px 10px rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;">♪</button>
     </div>
 
     <script>
-        // 音樂播放控制
-        let musicPlaying = false;
+        var musicPlaying = false;
         function toggleMusic() {
-            const audio = document.getElementById('bgMusic');
-            const btn = document.getElementById('musicBtn');
-            if (musicPlaying) {
-                audio.pause();
-                btn.textContent = '♪';
-                btn.style.opacity = '0.6';
-            } else {
-                audio.play();
-                btn.textContent = '♫';
-                btn.style.opacity = '1';
-            }
+            var audio = document.getElementById('bgMusic');
+            var btn = document.getElementById('musicBtn');
+            if (musicPlaying) { audio.pause(); btn.textContent = '♪'; btn.style.opacity = '0.6'; }
+            else { audio.play(); btn.textContent = '♫'; btn.style.opacity = '1'; }
             musicPlaying = !musicPlaying;
         }
 
-        // 檔案上傳預覽
         function handleFileUpload(input) {
-            const preview = document.getElementById('filePreview');
-            const files = input.files;
-            for (let i = 0; i < files.length; i++) {
-                const file = files[i];
-                const wrapper = document.createElement('div');
+            var preview = document.getElementById('filePreview');
+            for (var i = 0; i < input.files.length; i++) {
+                var file = input.files[i];
+                var wrapper = document.createElement('div');
                 wrapper.className = 'relative';
                 wrapper.style.cssText = 'width:60px;height:60px;border:2px solid black;overflow:hidden;';
-                
                 if (file.type.startsWith('image/')) {
-                    const img = document.createElement('img');
+                    var img = document.createElement('img');
                     img.src = URL.createObjectURL(file);
                     img.style.cssText = 'width:100%;height:100%;object-fit:cover;';
                     wrapper.appendChild(img);
                 } else {
                     wrapper.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100%;font-size:24px;">🎬</div>';
                 }
-                
-                const removeBtn = document.createElement('div');
+                var removeBtn = document.createElement('div');
                 removeBtn.textContent = '✕';
                 removeBtn.style.cssText = 'position:absolute;top:0;right:0;background:black;color:white;width:16px;height:16px;font-size:10px;display:flex;align-items:center;justify-content:center;cursor:pointer;';
-                removeBtn.onclick = () => wrapper.remove();
+                removeBtn.onclick = (function(w) { return function() { w.remove(); }; })(wrapper);
                 wrapper.appendChild(removeBtn);
-                
                 preview.appendChild(wrapper);
             }
         }
 
-        // 停車位勾選
         function toggleParking() {
-            const cb = document.getElementById('parkingCheck');
-            const box = document.getElementById('parkingBox');
+            var cb = document.getElementById('parkingCheck');
+            var box = document.getElementById('parkingBox');
             cb.checked = !cb.checked;
-            if (cb.checked) {
-                box.style.backgroundColor = 'black';
-                box.style.color = 'white';
-                box.textContent = '✓';
-            } else {
-                box.style.backgroundColor = 'white';
-                box.style.color = 'black';
-                box.textContent = '';
-            }
+            box.style.backgroundColor = cb.checked ? 'black' : 'white';
+            box.style.color = cb.checked ? 'white' : 'black';
+            box.textContent = cb.checked ? '✓' : '';
         }
 
-        // 照片輪播功能
-        const carousel = document.getElementById('photoCarousel');
-        const dotsContainer = document.getElementById('carouselDots');
-        const photos = carousel.querySelectorAll('img');
-        const totalPhotos = photos.length;
-
-        // 生成小圓點
-        for (let i = 0; i < totalPhotos; i++) {
-            const dot = document.createElement('span');
+        // 輪播
+        var carousel = document.getElementById('photoCarousel');
+        var dotsContainer = document.getElementById('carouselDots');
+        var totalPhotos = carousel.querySelectorAll('img').length;
+        for (var i = 0; i < totalPhotos; i++) {
+            var dot = document.createElement('span');
             if (i === 0) dot.classList.add('active');
-            dot.addEventListener('click', () => {
-                carousel.scrollTo({ left: carousel.clientWidth * i, behavior: 'smooth' });
-            });
+            dot.addEventListener('click', (function(idx) { return function() { carousel.scrollTo({ left: carousel.clientWidth * idx, behavior: 'smooth' }); }; })(i));
             dotsContainer.appendChild(dot);
         }
-
-        // 監聽滾動更新圓點
-        carousel.addEventListener('scroll', () => {
-            const index = Math.round(carousel.scrollLeft / carousel.clientWidth);
-            dotsContainer.querySelectorAll('span').forEach((d, i) => {
-                d.classList.toggle('active', i === index);
-            });
+        carousel.addEventListener('scroll', function() {
+            var index = Math.round(carousel.scrollLeft / carousel.clientWidth);
+            var dots = dotsContainer.querySelectorAll('span');
+            for (var j = 0; j < dots.length; j++) {
+                dots[j].classList.toggle('active', j === index);
+            }
         });
 
-        const guestCountSelect = document.getElementById('guestCount');
-        const guestListContainer = document.getElementById('guestList');
-        const attendingContent = document.getElementById('attendingContent');
-        const attendingRadios = document.getElementsByName('attending');
+        // ========== 賓客表格（選幾位就出現幾格，每格有姓名+餐點下拉） ==========
+        var guestCountSelect = document.getElementById('guestCount');
+        var guestListContainer = document.getElementById('guestList');
+        var attendingContent = document.getElementById('attendingContent');
+        var attendingRadios = document.getElementsByName('attending');
 
-        const mealOptions = [
+        var mealOptions = [
             "紐西蘭帶骨小牛.西班牙蒜香蝦.洋芋泥",
             "南洋香料豬肋排.西班牙蒜香蝦.洋芋泥",
             "中式素食餐",
@@ -553,136 +267,123 @@
 
         function renderGuestFields(count) {
             guestListContainer.innerHTML = '';
-            for (let i = 1; i <= count; i++) {
-                const card = document.createElement('div');
+            for (var i = 1; i <= count; i++) {
+                var card = document.createElement('div');
                 card.className = 'guest-card';
-                
-                const mealOptionsHtml = mealOptions.map(opt => `<option value="${opt}">${opt}</option>`).join('');
-
-                card.innerHTML = `
-                    <div class="flex items-center gap-2">
-                        <span class="bg-black text-white text-xs px-2 py-1 font-black whitespace-nowrap">GUEST ${i}</span>
-                        <input type="text" placeholder="姓名" class="flex-1 font-black outline-none text-sm border-b-2 border-black" style="min-width:0;">
-                        <div class="select-container" style="width:110px;flex-shrink:0;">
-                            <select class="manga-select-btn text-xs" style="padding:8px 25px 8px 6px;">
-                                <option disabled selected>餐點</option>
-                                ${mealOptionsHtml}
-                            </select>
-                        </div>
-                    </div>
-                `;
+                var optionsHtml = '<option disabled selected>餐點</option>';
+                for (var j = 0; j < mealOptions.length; j++) {
+                    optionsHtml += '<option value="' + mealOptions[j] + '">' + mealOptions[j] + '</option>';
+                }
+                card.innerHTML = '<div class="flex items-center gap-2">'
+                    + '<span class="bg-black text-white text-xs px-2 py-1 font-black whitespace-nowrap">GUEST ' + i + '</span>'
+                    + '<input type="text" placeholder="姓名" class="flex-1 font-black outline-none text-sm border-b-2 border-black" style="min-width:0;">'
+                    + '<div class="select-container" style="width:110px;flex-shrink:0;">'
+                    + '<select class="manga-select-btn text-xs" style="padding:8px 25px 8px 6px;">'
+                    + optionsHtml
+                    + '</select></div></div>';
                 guestListContainer.appendChild(card);
             }
         }
 
-        guestCountSelect.addEventListener('change', (e) => {
-            renderGuestFields(e.target.value);
+        guestCountSelect.addEventListener('change', function(e) {
+            renderGuestFields(parseInt(e.target.value));
         });
 
-        attendingRadios.forEach(radio => {
-            radio.addEventListener('change', (e) => {
+        for (var r = 0; r < attendingRadios.length; r++) {
+            attendingRadios[r].addEventListener('change', function(e) {
                 attendingContent.style.display = (e.target.value === 'yes') ? 'block' : 'none';
             });
-        });
+        }
 
         renderGuestFields(1);
 
-        // ★★★ 請把下面的網址換成你部署的 Google Apps Script 網址 ★★★
-        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyfVSHoQkbPtNCXY1132DIhiNg2icKH0GxQKiugLrAp-0vWR9sPXs_O156CAFMIpvpPPw/exec';
+        // ========== 提交表單 ==========
+        var GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyfVSHoQkbPtNCXY1132DIhiNg2icKH0GxQKiugLrAp-0vWR9sPXs_O156CAFMIpvpPPw/exec';
 
-        async function submitRSVP() {
-            const submitBtn = document.querySelector('#rsvpForm button[type="button"]');
+        function submitRSVP() {
+            var submitBtn = document.querySelector('#rsvpForm button[type="button"]');
             submitBtn.disabled = true;
             submitBtn.textContent = '送出中...';
 
-            try {
-                // 收集表單資料
-                const attending = document.querySelector('input[name="attending"]:checked').value;
-                const guestCount = document.getElementById('guestCount').value;
-                const parking = document.getElementById('parkingCheck').checked;
-                const message = document.querySelector('textarea').value;
+            var attending = document.querySelector('input[name="attending"]:checked').value;
+            var guestCount = document.getElementById('guestCount').value;
+            var parking = document.getElementById('parkingCheck').checked;
+            var message = document.querySelector('textarea').value;
 
-                // 收集賓客資料
-                const guestCards = document.querySelectorAll('.guest-card');
-                const guests = [];
-                guestCards.forEach(card => {
-                    const name = card.querySelector('input[type="text"]').value;
-                    const meal = card.querySelector('select').value;
-                    guests.push({ name: name || '未填', meal: meal || '未選' });
+            var guestCards = document.querySelectorAll('.guest-card');
+            var guests = [];
+            for (var g = 0; g < guestCards.length; g++) {
+                var nameInput = guestCards[g].querySelector('input[type="text"]');
+                var mealSelect = guestCards[g].querySelector('select');
+                guests.push({
+                    name: nameInput.value || '未填',
+                    meal: mealSelect.selectedIndex > 0 ? mealSelect.value : '未選'
                 });
+            }
 
-                // 收集上傳檔案（轉 base64）
-                const fileInput = document.getElementById('fileUpload');
-                const files = [];
-                if (fileInput.files.length > 0) {
-                    for (let i = 0; i < fileInput.files.length; i++) {
-                        const file = fileInput.files[i];
-                        if (file.size > 10 * 1024 * 1024) {
-                            alert(`檔案 ${file.name} 超過 10MB，已跳過`);
-                            continue;
-                        }
-                        const base64 = await fileToBase64(file);
-                        files.push({
-                            name: file.name,
-                            type: file.type,
-                            content: base64
-                        });
-                    }
+            var fileInput = document.getElementById('fileUpload');
+            var filesArr = [];
+            var filePromises = [];
+
+            for (var f = 0; f < fileInput.files.length; f++) {
+                if (fileInput.files[f].size > 10 * 1024 * 1024) {
+                    alert('檔案 ' + fileInput.files[f].name + ' 超過 10MB，已跳過');
+                    continue;
                 }
+                filePromises.push(readFileAsBase64(fileInput.files[f]));
+            }
 
-                const payload = {
-                    attending,
+            Promise.all(filePromises).then(function(results) {
+                var payload = {
+                    attending: attending,
                     guestCount: attending === 'yes' ? guestCount : 0,
                     guests: attending === 'yes' ? guests : [],
-                    parking,
-                    message,
-                    files
+                    parking: parking,
+                    message: message,
+                    files: results
                 };
 
-                // 使用 no-cors 模式避免跨域問題
-                await fetch(GOOGLE_SCRIPT_URL, {
+                fetch(GOOGLE_SCRIPT_URL, {
                     method: 'POST',
                     mode: 'no-cors',
                     headers: { 'Content-Type': 'text/plain' },
                     body: JSON.stringify(payload)
+                }).then(function() {
+                    showSuccessModal();
+                }).catch(function(err) {
+                    console.error(err);
+                    alert('送出失敗，請檢查網路連線後再試一次');
+                }).finally(function() {
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = '提交回覆 <span class="text-xs opacity-70">SEND</span>';
                 });
-
-                // no-cors 模式無法讀取回應，直接顯示成功
-                showSuccessModal();
-
-            } catch (error) {
-                console.error('提交錯誤:', error);
-                alert('送出失敗，請檢查網路連線後再試一次');
-            } finally {
-                submitBtn.disabled = false;
-                submitBtn.innerHTML = '提交回覆 <span class="text-xs opacity-70">SEND</span>';
-            }
+            });
         }
 
-        function fileToBase64(file) {
-            return new Promise((resolve, reject) => {
-                const reader = new FileReader();
-                reader.onload = () => resolve(reader.result.split(',')[1]);
+        function readFileAsBase64(file) {
+            return new Promise(function(resolve, reject) {
+                var reader = new FileReader();
+                reader.onload = function() {
+                    resolve({ name: file.name, type: file.type, content: reader.result.split(',')[1] });
+                };
                 reader.onerror = reject;
                 reader.readAsDataURL(file);
             });
         }
 
         function showSuccessModal() {
-            const successModal = document.createElement('div');
-            successModal.className = "fixed inset-0 bg-black/90 flex items-center justify-center z-50 p-6";
-            successModal.innerHTML = `
-                <div class="bg-white border-8 border-black p-6 text-center max-w-sm">
-                    <img src="thanks.jpg" alt="" style="width:100%;border:4px solid black;margin-bottom:12px;">
-                    <div class="text-3xl font-black italic mb-3" style="font-family:'Noto Sans JP',sans-serif;">ヤッター！</div>
-                    <p class="font-black text-lg mb-2 underline underline-offset-8 decoration-4">您的回覆已成功送出！</p>
-                    <p class="text-[10px] text-gray-400 font-bold mb-3">Your response has been submitted.</p>
-                    <p class="font-bold text-sm text-gray-600 mb-1">感激不盡ヾ(´ε`ヾ)</p>
-                    <p class="text-[10px] text-gray-400 font-bold mb-5">Thank you so much!</p>
-                    <button onclick="this.closest('.fixed').remove()" class="w-full bg-black text-white py-2 text-sm font-black italic border-3 border-black" style="border-width:3px;">關閉 <span class="text-[10px] opacity-70">CLOSE</span></button>
-                </div>
-            `;
-            document.body.appendChild(successModal);
+            var m = document.createElement('div');
+            m.className = 'fixed inset-0 bg-black/90 flex items-center justify-center z-50 p-6';
+            m.innerHTML = '<div class="bg-white border-8 border-black p-6 text-center max-w-sm">'
+                + '<img src="thanks.jpg" alt="" style="width:100%;border:4px solid black;margin-bottom:12px;">'
+                + '<div class="text-3xl font-black italic mb-3" style="font-family:Noto Sans JP,sans-serif;">ヤッター！</div>'
+                + '<p class="font-black text-lg mb-2 underline underline-offset-8 decoration-4">您的回覆已成功送出！</p>'
+                + '<p class="text-[10px] text-gray-400 font-bold mb-3">Your response has been submitted.</p>'
+                + '<p class="font-bold text-sm text-gray-600 mb-1">感激不盡ヾ(´ε`ヾ)</p>'
+                + '<p class="text-[10px] text-gray-400 font-bold mb-5">Thank you so much!</p>'
+                + '<button onclick="this.closest(\'.fixed\').remove()" class="w-full bg-black text-white py-2 text-sm font-black italic" style="border:3px solid black;">關閉 <span class="text-[10px] opacity-70">CLOSE</span></button>'
+                + '</div>';
+            document.body.appendChild(m);
         }
     </script>
 </body>
