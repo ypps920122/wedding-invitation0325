@@ -40,6 +40,16 @@
         .carousel-dots { display: flex; justify-content: center; gap: 8px; margin-top: 10px; }
         .carousel-dots span { width: 10px; height: 10px; background: #ccc; border: 2px solid black; cursor: pointer; transition: background 0.2s; }
         .carousel-dots span.active { background: black; }
+        /* 像素風載入動畫 */
+        .loading-overlay { position:fixed;inset:0;background:white;z-index:200;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px; }
+        .pixel-ground { position:absolute;bottom:40%;left:0;right:0;border-top:4px solid black; }
+        .pixel-runner { position:relative;animation:pixelRun 0.4s steps(2) infinite;font-size:32px;image-rendering:pixelated; }
+        @keyframes pixelRun { 0% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+        .pixel-dots { display:flex;gap:4px;margin-top:8px; }
+        .pixel-dots span { width:8px;height:8px;background:black;animation:dotBlink 1s steps(1) infinite; }
+        .pixel-dots span:nth-child(2) { animation-delay:0.3s; }
+        .pixel-dots span:nth-child(3) { animation-delay:0.6s; }
+        @keyframes dotBlink { 0%,100% { opacity:1; } 50% { opacity:0; } }
     </style>
 </head>
 <body class="dot-bg">
@@ -48,7 +58,6 @@
         <!-- 封面 -->
         <section class="relative overflow-hidden pt-12 pb-8 focus-lines">
             <div class="onomatopoeia text-6xl top-4 -left-2 rotate-[-15deg] pulse-text">ドキドキ</div>
-            <div class="onomatopoeia text-4xl top-20 right-2 rotate-[10deg] pulse-text-delay">キュン</div>
             <div class="text-center relative z-10 px-4">
                 <div class="inline-block border-4 border-black p-2 bg-white mb-4">
                     <p class="text-xs font-black tracking-widest italic uppercase">Wedding Invitation</p>
@@ -66,6 +75,7 @@
         <!-- 主照片 -->
         <section class="relative">
             <img src="O60A5405.jpg" alt="" class="w-full block">
+            <div class="onomatopoeia text-3xl top-6 right-6 rotate-[10deg] pulse-text-delay">キュン</div>
         </section>
 
         <!-- 愛心 -->
@@ -92,12 +102,12 @@
 
         <!-- 照片輪播 -->
         <section class="p-6 relative">
-            <div class="onomatopoeia text-lg top-2 right-8 rotate-[12deg] opacity-30" style="text-shadow:none;">キラキラ</div>
-            <div class="onomatopoeia text-lg bottom-8 left-4 rotate-[-10deg] opacity-25" style="text-shadow:none;">ジャーン</div>
             <div class="relative">
                 <div class="photo-carousel" id="photoCarousel">
-                    <img src="O60A5243.jpg" alt=""><img src="O60A5258-編輯.jpg" alt=""><img src="O60A5433.jpg" alt=""><img src="O60A6899.jpg" alt=""><img src="O60A5501.jpg" alt=""><img src="O60A5521.jpg" alt=""><img src="O60A5525.jpg" alt=""><img src="O60A6901.jpg" alt=""><img src="O60A5567.jpg" alt=""><img src="O60A5579.jpg" alt=""><img src="O60A5721-編輯.jpg" alt="">
+                    <img src="O60A5243.jpg" alt=""><img src="66850027.jpg" alt=""><img src="O60A5258-編輯.jpg" alt=""><img src="O60A5433.jpg" alt=""><img src="O60A6899.jpg" alt=""><img src="O60A6870.jpg" alt=""><img src="O60A5501.jpg" alt=""><img src="O60A5521.jpg" alt=""><img src="66850033.jpg" alt=""><img src="O60A5525.jpg" alt=""><img src="O60A6901.jpg" alt=""><img src="O60A6917.jpg" alt=""><img src="O60A5567.jpg" alt=""><img src="O60A7004.jpg" alt=""><img src="O60A5579.jpg" alt=""><img src="O60A7065.jpg" alt=""><img src="O60A5721-編輯.jpg" alt=""><img src="O60A7091.jpg" alt="">
                 </div>
+                <div class="onomatopoeia text-lg top-3 right-4 rotate-[12deg]" style="text-shadow:none;color:black;opacity:1;">キラキラ</div>
+                <div class="onomatopoeia text-lg bottom-12 left-3 rotate-[-10deg]" style="text-shadow:none;color:black;opacity:1;">ジャーン</div>
                 <div class="carousel-dots" id="carouselDots"></div>
             </div>
         </section>
@@ -181,27 +191,14 @@
 
         <!-- 頁腳 -->
         <footer class="bg-black text-white p-12 text-center relative overflow-hidden">
-            <div class="onomatopoeia text-white opacity-20 text-3xl right-4 bottom-12" style="text-shadow:none;">つづく</div>
-            <p class="text-xs tracking-[0.5em] mb-4 italic">TO BE CONTINUED</p>
+            <p class="text-xs tracking-[0.5em] mb-4 italic">THANK YOU!</p>
             <h3 class="text-2xl font-black italic">Andy & Wen</h3>
             <p class="mt-8 text-[10px] opacity-50 font-bold uppercase italic tracking-widest">© 2027 The Wedding Archive</p>
         </footer>
 
-        <!-- 音樂 -->
-        <audio id="bgMusic" loop preload="auto"><source src="桑田佳祐--明日晴れるかなfull-ver.mp3" type="audio/mpeg"></audio>
-        <button id="musicBtn" onclick="toggleMusic()" style="position:fixed;bottom:20px;right:20px;width:44px;height:44px;border-radius:50%;background:black;color:white;border:3px solid white;font-size:18px;cursor:pointer;z-index:100;box-shadow:0 2px 10px rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;">♪</button>
     </div>
 
     <script>
-        var musicPlaying = false;
-        function toggleMusic() {
-            var audio = document.getElementById('bgMusic');
-            var btn = document.getElementById('musicBtn');
-            if (musicPlaying) { audio.pause(); btn.textContent = '♪'; btn.style.opacity = '0.6'; }
-            else { audio.play(); btn.textContent = '♫'; btn.style.opacity = '1'; }
-            musicPlaying = !musicPlaying;
-        }
-
         function handleFileUpload(input) {
             var preview = document.getElementById('filePreview');
             for (var i = 0; i < input.files.length; i++) {
@@ -319,7 +316,7 @@
             var guestCards = document.querySelectorAll('.guest-card');
             var guests = [];
 
-            // 驗證餐點是否都有選（僅參加時）
+            // 驗證餐點
             if (attending === 'yes') {
                 for (var v = 0; v < guestCards.length; v++) {
                     var checkMeal = guestCards[v].querySelector('select');
@@ -332,6 +329,15 @@
                     }
                 }
             }
+
+            // 顯示像素風載入畫面
+            var loadingEl = document.createElement('div');
+            loadingEl.className = 'loading-overlay';
+            loadingEl.innerHTML = '<div class="pixel-runner">🐉</div>'
+                + '<p style="font-weight:900;font-size:14px;letter-spacing:2px;">送出中</p>'
+                + '<div class="pixel-dots"><span></span><span></span><span></span></div>'
+                + '<div class="pixel-ground"></div>';
+            document.body.appendChild(loadingEl);
 
             for (var g = 0; g < guestCards.length; g++) {
                 var nameInput = guestCards[g].querySelector('input[type="text"]');
@@ -370,8 +376,10 @@
                     headers: { 'Content-Type': 'text/plain' },
                     body: JSON.stringify(payload)
                 }).then(function() {
+                    loadingEl.remove();
                     showSuccessModal();
                 }).catch(function(err) {
+                    loadingEl.remove();
                     console.error(err);
                     alert('送出失敗，請檢查網路連線後再試一次');
                 }).finally(function() {
