@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>張育安 & 許雯 - 漫畫婚禮手機版</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@900&family=Noto+Sans+TC:wght@900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --manga-black: #000000;
+            --manga-white: #ffffff;
+            --manga-gray: #f0f0f0;
+        }
+
+        body {
+            background-color: #333;
+            font-family: 'Noto Sans TC', sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+        }
+
+        /* 模擬手機外框 */
+        .mobile-frame {
+            width: 100%;
+            max-width: 414px;
+            background-color: var(--manga-white);
+            min-height: 100vh;
+            border-left: 8px solid var(--manga-black);
+            border-right: 8px solid var(--manga-black);
+            position: relative;
+            overflow-x: hidden;
+            box-shadow: 0 0 50px rgba(0,0,0,0.5);
+        }
+
+        /* 網點背景效果 */
+        .dot-bg {
+            background-image: radial-gradient(var(--manga-black) 1px, transparent 1px);
+            background-size: 15px 15px;
+            background-color: rgba(0,0,0,0.03);
+        }
+
+        /* 漫畫標題粗邊框 */
+        .manga-panel {
+            border: 5px solid var(--manga-black);
+            margin: 10px;
+            background: white;
+            position: relative;
+        }
+
+        /* 擬聲詞效果 */
+        .onomatopoeia {
+            font-family: 'Noto Sans JP', sans-serif;
+            font-weight: 900;
+            font-style: italic;
+            position: absolute;
+            z-index: 10;
+            text-shadow: 4px 4px 0 white, -2px -2px 0 white, 2px -2px 0 white, -2px 2px 0 white;
+            color: black;
+            pointer-events: none;
+            line-height: 1;
+        }
+
+        /* 對話框 */
+        .speech-bubble {
+            position: relative;
+            background: #fff;
+            border: 4px solid #000;
+            border-radius: 50px;
+            padding: 20px;
+            text-align: center;
+            font-weight: 900;
+            margin: 20px;
+        }
+
+        .speech-bubble::after {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            left: 50%;
+            border-width: 15px 15px 0;
+            border-style: solid;
+            border-color: #000 transparent;
+            display: block;
+            width: 0;
+            margin-left: -15px;
+        }
+
+        /* 集中線 */
+        .focus-lines {
+            background: repeating-conic-gradient(from 0deg, #fff 0deg 2deg, #eee 2deg 4deg);
+        }
+
+        /* 自定義下拉選單 */
+        .manga-select-btn {
+            appearance: none;
+            width: 100%;
+            background-color: white;
+            border: 4px solid black;
+            padding: 15px;
+            font-weight: 900;
+            font-size: 1rem;
+            cursor: pointer;
+            outline: none;
+            transition: transform 0.1s;
+        }
+
+        .manga-select-btn:active {
+            transform: scale(0.98);
+            background-color: #f0f0f0;
+        }
+
+        .select-container {
+            position: relative;
+        }
+
+        .select-container::after {
+            content: "▼";
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            pointer-events: none;
+            font-weight: 900;
+        }
+
+        /* 照片處理 */
+        .manga-photo {
+            filter: grayscale(100%) contrast(1.2);
+            transition: 0.3s;
+        }
+        .manga-photo:hover {
+            filter: grayscale(0%) contrast(1);
+        }
+
+        /* 賓客區塊 */
+        .guest-card {
+            border: 3px solid black;
+            padding: 10px;
+            margin-bottom: 10px;
+            box-shadow: 5px 5px 0 rgba(0,0,0,1);
+            background: white;
+        }
+
+        /* 照片輪播 */
+        .photo-carousel {
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+            display: flex;
+            gap: 0;
+            border: 4px solid black;
+        }
+        .photo-carousel::-webkit-scrollbar { display: none; }
+        .photo-carousel img {
+            scroll-snap-align: center;
+            flex: 0 0 100%;
+            width: 100%;
+            height: 280px;
+            object-fit: cover;
+            filter: grayscale(100%) contrast(1.2);
+            transition: filter 0.3s;
+        }
+        .photo-carousel img:hover,
+        .photo-carousel img:active {
+            filter: grayscale(0%) contrast(1);
+        }
+        .carousel-dots {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 10px;
+        }
+        .carousel-dots span {
+            width: 10px;
+            height: 10px;
+            background: #ccc;
+            border: 2px solid black;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .carousel-dots span.active {
+            background: black;
+        }
+    </style>
+</head>
+<body class="dot-bg">
+
+    <div class="mobile-frame">
+        <!-- 封面區域 -->
+        <section class="relative overflow-hidden pt-12 pb-8 border-b-8 border-black focus-lines">
+            <div class="onomatopoeia text-6xl top-4 -left-2 rotate-[-15deg]">ドンッ</div>
+            <div class="onomatopoeia text-4xl top-20 right-2 rotate-[10deg]">ジャーン</div>
+            
+            <div class="text-center relative z-10 px-4">
+                <div class="inline-block border-4 border-black p-2 bg-white mb-4">
+                    <p class="text-xs font-black tracking-widest italic uppercase">Wedding Invitation</p>
+                </div>
+                <h1 class="text-6xl font-black mb-2">張育安</h1>
+                <h1 class="text-3xl font-black mb-2">×</h1>
+                <h1 class="text-6xl font-black mb-6">許雯</h1>
+                <div class="bg-black text-white inline-block px-4 py-2 text-xl font-black italic">
+                    2027.01.31
+                </div>
+            </div>
+        </section>
+
+        <!-- 漫畫格子照片 -->
+        <section class="border-b-8 border-black bg-black">
+            <img src="https://lh3.googleusercontent.com/u/0/d/1wUGwdze4gvF7jYKAAJw0J5GNRiPunqUA" alt="婚紗照" class="w-full manga-photo block">
+        </section>
+
+        <!-- 地點資訊對話框 -->
+        <section class="p-6">
+            <div class="speech-bubble text-xl">
+                我們要在這裡結婚啦！<br>
+                大家一定要來喔！
+            </div>
+
+            <div class="manga-panel p-6 shadow-[10px_10px_0_black]">
+                <h2 class="text-2xl font-black mb-4 underline decoration-4 underline-offset-4 italic">LOCATION</h2>
+                <div class="space-y-2 font-black">
+                    <p class="text-xl">CHALET V</p>
+                    <p class="text-sm text-gray-600">台北市中山區植福路8號 (典華後方大木門)</p>
+                    <a href="https://maps.app.goo.gl/yYpYyE5w6n6A5H9N6" target="_blank" class="block mt-4 border-4 border-black overflow-hidden">
+                        <img src="https://maps.googleapis.com/maps/api/staticmap?center=25.0775,121.5246&zoom=16&size=600x250&scale=2&markers=color:black%7C25.0775,121.5246&style=feature:all%7Csaturation:-100&key=AIzaSyA0s1a7phLN0iaD6-UE7m4qP-z21pH0eSc" alt="" class="w-full block" style="filter:grayscale(100%) contrast(1.1);">
+                        <div class="bg-black text-white text-center py-3 hover:bg-white hover:text-black transition duration-200">
+                            查看地圖 MAP
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- 照片輪播區 -->
+        <section class="p-6 border-t-8 border-black">
+            <div class="relative">
+                <div class="photo-carousel" id="photoCarousel">
+                    <img src="photos/O60A5243.jpg" alt="">
+                    <img src="photos/O60A5258-編輯.jpg" alt="">
+                    <img src="photos/O60A5346.jpg" alt="">
+                    <img src="photos/O60A5433.jpg" alt="">
+                    <img src="photos/O60A5501.jpg" alt="">
+                    <img src="photos/O60A5521.jpg" alt="">
+                    <img src="photos/O60A5525.jpg" alt="">
+                    <img src="photos/O60A5567.jpg" alt="">
+                    <img src="photos/O60A5579.jpg" alt="">
+                    <img src="photos/O60A5684-編輯__2_.jpg" alt="">
+                    <img src="photos/O60A5721-編輯.jpg" alt="">
+                    <img src="photos/O60A5786-編輯.jpg" alt="">
+                </div>
+                <div class="carousel-dots" id="carouselDots"></div>
+            </div>
+        </section>
+
+        <!-- 調查問卷區 -->
+        <section class="p-6 bg-gray-50 border-t-8 border-black">
+            <div class="flex items-center gap-2 mb-6">
+                <div class="h-10 w-3 bg-black"></div>
+                <h2 class="text-3xl font-black italic">出席調查</h2>
+            </div>
+
+            <form id="rsvpForm" class="space-y-8">
+                <!-- 出席狀態 -->
+                <div class="grid grid-cols-2 gap-3">
+                    <label class="cursor-pointer">
+                        <input type="radio" name="attending" value="yes" checked class="hidden peer">
+                        <div class="border-3 border-black p-2 text-center text-sm font-black peer-checked:bg-black peer-checked:text-white transition" style="border-width:3px;">
+                            參加
+                        </div>
+                    </label>
+                    <label class="cursor-pointer">
+                        <input type="radio" name="attending" value="no" class="hidden peer">
+                        <div class="border-3 border-black p-2 text-center text-sm font-black peer-checked:bg-black peer-checked:text-white transition" style="border-width:3px;">
+                            不克參加
+                        </div>
+                    </label>
+                </div>
+
+                <div id="formContent" class="space-y-6">
+                    <!-- 人數選擇 -->
+                    <div>
+                        <label class="block font-black mb-2 text-lg italic">出席人數 TOTAL GUESTS</label>
+                        <div class="select-container">
+                            <select id="guestCount" class="manga-select-btn">
+                                <option value="1">1 位</option>
+                                <option value="2">2 位</option>
+                                <option value="3">3 位</option>
+                                <option value="4">4 位</option>
+                                <option value="5">5 位</option>
+                                <option value="6">6 位</option>
+                                <option value="7">7 位</option>
+                                <option value="8">8 位</option>
+                                <option value="9">9 位</option>
+                                <option value="10">10 位</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- 賓客資料動態生成 -->
+                    <div id="guestList"></div>
+
+                    <!-- 備註 -->
+                    <div>
+                        <label class="block font-black mb-2 text-lg italic">給我們的話 MESSAGE</label>
+                        <textarea rows="4" placeholder="有什麼想說的嗎？" class="w-full border-4 border-black p-4 font-black outline-none focus:bg-yellow-50"></textarea>
+                    </div>
+
+                    <!-- 停車位 -->
+                    <div>
+                        <label class="flex items-center gap-3 cursor-pointer" onclick="toggleParking()">
+                            <div id="parkingBox" class="w-8 h-8 border-4 border-black flex items-center justify-center transition text-lg font-black"></div>
+                            <input type="checkbox" id="parkingCheck" class="hidden">
+                            <span class="font-black text-lg">需要停車位 PARKING</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- 提交按鈕 -->
+                <button type="button" onclick="submitRSVP()" class="w-full bg-black text-white py-6 text-2xl font-black italic border-4 border-black hover:bg-white hover:text-black transition-all active:translate-x-1 active:translate-y-1">
+                    提交回覆 SEND!
+                </button>
+            </form>
+        </section>
+
+        <!-- 結尾頁腳 -->
+        <footer class="bg-black text-white p-12 text-center relative overflow-hidden">
+            <div class="onomatopoeia text-white opacity-20 text-4xl -right-4 bottom-4">つづく</div>
+            <p class="text-xs tracking-[1em] mb-4">TO BE CONTINUED</p>
+            <h3 class="text-2xl font-black italic">Andy & Wen</h3>
+            <p class="mt-8 text-[10px] opacity-50 font-bold uppercase italic tracking-widest">© 2027 The Wedding Archive</p>
+        </footer>
+    </div>
+
+    <script>
+        // 停車位勾選
+        function toggleParking() {
+            const cb = document.getElementById('parkingCheck');
+            const box = document.getElementById('parkingBox');
+            cb.checked = !cb.checked;
+            if (cb.checked) {
+                box.style.backgroundColor = 'black';
+                box.style.color = 'white';
+                box.textContent = '✓';
+            } else {
+                box.style.backgroundColor = 'white';
+                box.style.color = 'black';
+                box.textContent = '';
+            }
+        }
+
+        // 照片輪播功能
+        const carousel = document.getElementById('photoCarousel');
+        const dotsContainer = document.getElementById('carouselDots');
+        const photos = carousel.querySelectorAll('img');
+        const totalPhotos = photos.length;
+
+        // 生成小圓點
+        for (let i = 0; i < totalPhotos; i++) {
+            const dot = document.createElement('span');
+            if (i === 0) dot.classList.add('active');
+            dot.addEventListener('click', () => {
+                carousel.scrollTo({ left: carousel.clientWidth * i, behavior: 'smooth' });
+            });
+            dotsContainer.appendChild(dot);
+        }
+
+        // 監聽滾動更新圓點
+        carousel.addEventListener('scroll', () => {
+            const index = Math.round(carousel.scrollLeft / carousel.clientWidth);
+            dotsContainer.querySelectorAll('span').forEach((d, i) => {
+                d.classList.toggle('active', i === index);
+            });
+        });
+
+        const guestCountSelect = document.getElementById('guestCount');
+        const guestListContainer = document.getElementById('guestList');
+        const formContent = document.getElementById('formContent');
+        const attendingRadios = document.getElementsByName('attending');
+
+        const mealOptions = [
+            "紐西蘭帶骨小牛.西班牙蒜香蝦.洋芋泥",
+            "南洋香料豬肋排.西班牙蒜香蝦.洋芋泥",
+            "中式素食餐",
+            "兒童(100-140cm)",
+            "幼童(80-100cm)"
+        ];
+
+        function renderGuestFields(count) {
+            guestListContainer.innerHTML = '';
+            for (let i = 1; i <= count; i++) {
+                const card = document.createElement('div');
+                card.className = 'guest-card';
+                
+                const mealOptionsHtml = mealOptions.map(opt => `<option value="${opt}">${opt}</option>`).join('');
+
+                card.innerHTML = `
+                    <div class="flex items-center gap-2">
+                        <span class="bg-black text-white text-xs px-2 py-1 font-black whitespace-nowrap">GUEST ${i}</span>
+                        <input type="text" placeholder="姓名" class="font-black outline-none text-sm" style="width:70px;">
+                        <div class="select-container flex-1">
+                            <select class="manga-select-btn text-xs" style="padding:8px 30px 8px 8px;">
+                                <option disabled selected>選擇餐點</option>
+                                ${mealOptionsHtml}
+                            </select>
+                        </div>
+                    </div>
+                `;
+                guestListContainer.appendChild(card);
+            }
+        }
+
+        guestCountSelect.addEventListener('change', (e) => {
+            renderGuestFields(e.target.value);
+        });
+
+        attendingRadios.forEach(radio => {
+            radio.addEventListener('change', (e) => {
+                formContent.style.display = (e.target.value === 'yes') ? 'block' : 'none';
+            });
+        });
+
+        renderGuestFields(1);
+
+        function submitRSVP() {
+            const successModal = document.createElement('div');
+            successModal.className = "fixed inset-0 bg-black/90 flex items-center justify-center z-50 p-6";
+            successModal.innerHTML = `
+                <div class="bg-white border-8 border-black p-8 text-center max-w-sm">
+                    <div class="text-6xl font-black italic mb-4">DONE!</div>
+                    <p class="font-black text-xl mb-6 underline underline-offset-8 decoration-4">您的回覆已成功送出！</p>
+                    <p class="font-bold text-sm text-gray-600 mb-8">感謝您的祝福，我們當天見！</p>
+                    <button onclick="this.closest('.fixed').remove()" class="w-full bg-black text-white py-4 font-black italic border-4 border-black">關閉 CLOSE</button>
+                </div>
+            `;
+            document.body.appendChild(successModal);
+        }
+    </script>
+</body>
+</html>
