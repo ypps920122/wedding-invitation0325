@@ -160,16 +160,11 @@
                     <div>
                         <label class="block font-black mb-1 text-lg italic">分享照片或影片</label>
                         <p class="text-[10px] text-gray-400 font-bold mb-2 tracking-wider">SHARE PHOTOS & VIDEOS</p>
-                        <p class="text-xs text-gray-500 font-bold mb-3">歡迎上傳你們與我們的合照或祝福影片！</p>
-                        <label class="block cursor-pointer">
-                            <input type="file" id="fileUpload" multiple accept="image/*,video/*" class="hidden" onchange="handleFileUpload(this)">
-                            <div class="border-4 border-dashed border-black p-6 text-center hover:bg-gray-100 transition">
-                                <div class="text-3xl mb-2">📷 🎬</div>
-                                <p class="font-black text-sm">點擊上傳照片或影片</p>
-                                <p class="text-[10px] text-gray-400 mt-1">Click to upload JPG, PNG, MP4</p>
-                            </div>
-                        </label>
-                        <div id="filePreview" class="mt-3 flex flex-wrap gap-2"></div>
+                        <div class="border-4 border-black p-5 text-center bg-white">
+                            <div class="text-2xl mb-2">📷 🎬</div>
+                            <p class="font-black text-sm mb-1">歡迎私訊傳照片或影片給我們！</p>
+                            <p class="text-[10px] text-gray-400">Feel free to DM us your photos & videos!</p>
+                        </div>
                     </div>
                 </div>
                 <button type="button" onclick="submitRSVP()" class="w-full bg-black text-white py-3 text-base font-black italic hover:bg-white hover:text-black transition-all active:translate-x-1 active:translate-y-1" style="border:3px solid black;">
@@ -195,30 +190,6 @@
     </div>
 
     <script>
-        function handleFileUpload(input) {
-            var preview = document.getElementById('filePreview');
-            for (var i = 0; i < input.files.length; i++) {
-                var file = input.files[i];
-                var wrapper = document.createElement('div');
-                wrapper.className = 'relative';
-                wrapper.style.cssText = 'width:60px;height:60px;border:2px solid black;overflow:hidden;';
-                if (file.type.startsWith('image/')) {
-                    var img = document.createElement('img');
-                    img.src = URL.createObjectURL(file);
-                    img.style.cssText = 'width:100%;height:100%;object-fit:cover;';
-                    wrapper.appendChild(img);
-                } else {
-                    wrapper.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100%;font-size:24px;">🎬</div>';
-                }
-                var removeBtn = document.createElement('div');
-                removeBtn.textContent = '✕';
-                removeBtn.style.cssText = 'position:absolute;top:0;right:0;background:black;color:white;width:16px;height:16px;font-size:10px;display:flex;align-items:center;justify-content:center;cursor:pointer;';
-                removeBtn.onclick = (function(w) { return function() { w.remove(); }; })(wrapper);
-                wrapper.appendChild(removeBtn);
-                preview.appendChild(wrapper);
-            }
-        }
-
         function toggleParking() {
             var cb = document.getElementById('parkingCheck');
             var box = document.getElementById('parkingBox');
@@ -360,55 +331,30 @@
                 });
             }
 
-            var fileInput = document.getElementById('fileUpload');
-            var filesArr = [];
-            var filePromises = [];
+            var payload = {
+                attending: attending,
+                guestCount: attending === 'yes' ? guestCount : 0,
+                guests: attending === 'yes' ? guests : [],
+                parking: parking,
+                message: message,
+                files: []
+            };
 
-            for (var f = 0; f < fileInput.files.length; f++) {
-                if (fileInput.files[f].size > 10 * 1024 * 1024) {
-                    alert('檔案 ' + fileInput.files[f].name + ' 超過 10MB，已跳過');
-                    continue;
-                }
-                filePromises.push(readFileAsBase64(fileInput.files[f]));
-            }
-
-            Promise.all(filePromises).then(function(results) {
-                var payload = {
-                    attending: attending,
-                    guestCount: attending === 'yes' ? guestCount : 0,
-                    guests: attending === 'yes' ? guests : [],
-                    parking: parking,
-                    message: message,
-                    files: results
-                };
-
-                fetch(GOOGLE_SCRIPT_URL, {
-                    method: 'POST',
-                    mode: 'no-cors',
-                    headers: { 'Content-Type': 'text/plain' },
-                    body: JSON.stringify(payload)
-                }).then(function() {
-                    loadingEl.remove();
-                    showSuccessModal();
-                }).catch(function(err) {
-                    loadingEl.remove();
-                    console.error(err);
-                    alert('送出失敗，請檢查網路連線後再試一次');
-                }).finally(function() {
-                    submitBtn.disabled = false;
-                    submitBtn.innerHTML = '提交回覆 <span class="text-xs opacity-70">SEND</span>';
-                });
-            });
-        }
-
-        function readFileAsBase64(file) {
-            return new Promise(function(resolve, reject) {
-                var reader = new FileReader();
-                reader.onload = function() {
-                    resolve({ name: file.name, type: file.type, content: reader.result.split(',')[1] });
-                };
-                reader.onerror = reject;
-                reader.readAsDataURL(file);
+            fetch(GOOGLE_SCRIPT_URL, {
+                method: 'POST',
+                mode: 'no-cors',
+                headers: { 'Content-Type': 'text/plain' },
+                body: JSON.stringify(payload)
+            }).then(function() {
+                loadingEl.remove();
+                showSuccessModal();
+            }).catch(function(err) {
+                loadingEl.remove();
+                console.error(err);
+                alert('送出失敗，請檢查網路連線後再試一次');
+            }).finally(function() {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '提交回覆 <span class="text-xs opacity-70">SEND</span>';
             });
         }
 
