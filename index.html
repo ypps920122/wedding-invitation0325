@@ -40,16 +40,12 @@
         .carousel-dots { display: flex; justify-content: center; gap: 8px; margin-top: 10px; }
         .carousel-dots span { width: 10px; height: 10px; background: #ccc; border: 2px solid black; cursor: pointer; transition: background 0.2s; }
         .carousel-dots span.active { background: black; }
-        /* 像素風載入動畫 */
-        .loading-overlay { position:fixed;inset:0;background:white;z-index:200;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px; }
-        .pixel-ground { position:absolute;bottom:40%;left:0;right:0;border-top:4px solid black; }
-        .pixel-runner { position:relative;animation:pixelRun 0.4s steps(2) infinite;font-size:32px;image-rendering:pixelated; }
-        @keyframes pixelRun { 0% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
-        .pixel-dots { display:flex;gap:4px;margin-top:8px; }
-        .pixel-dots span { width:8px;height:8px;background:black;animation:dotBlink 1s steps(1) infinite; }
-        .pixel-dots span:nth-child(2) { animation-delay:0.3s; }
-        .pixel-dots span:nth-child(3) { animation-delay:0.6s; }
-        @keyframes dotBlink { 0%,100% { opacity:1; } 50% { opacity:0; } }
+        /* 載入中彈窗 */
+        .loading-overlay { position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:200;display:flex;align-items:center;justify-content:center; }
+        .loading-box { background:white;border:8px solid black;padding:30px 40px;text-align:center; }
+        .loading-hearts { display:flex;justify-content:center;gap:6px;margin-bottom:12px; }
+        .loading-hearts span { font-size:14px;display:inline-block;animation:loadHeart 1.5s steps(3) infinite; }
+        @keyframes loadHeart { 0%,100% { transform:translateY(0) scale(1);opacity:0.4; } 50% { transform:translateY(-5px) scale(1.2);opacity:1; } }
     </style>
 </head>
 <body class="dot-bg">
@@ -104,7 +100,7 @@
         <section class="p-6 relative">
             <div class="relative">
                 <div class="photo-carousel" id="photoCarousel">
-                    <img src="O60A5243.jpg" alt=""><img src="66850027.jpg" alt=""><img src="O60A5258-編輯.jpg" alt=""><img src="O60A5433.jpg" alt=""><img src="O60A6899.jpg" alt=""><img src="O60A6870.jpg" alt=""><img src="O60A5501.jpg" alt=""><img src="O60A5521.jpg" alt=""><img src="66850033.jpg" alt=""><img src="O60A5525.jpg" alt=""><img src="O60A6901.jpg" alt=""><img src="O60A6917.jpg" alt=""><img src="O60A5567.jpg" alt=""><img src="O60A7004.jpg" alt=""><img src="O60A5579.jpg" alt=""><img src="O60A7065.jpg" alt=""><img src="O60A5721-編輯.jpg" alt=""><img src="O60A7091.jpg" alt="">
+                    <img src="O60A5243.jpg" alt=""><img src="O60A5258-編輯.jpg" alt=""><img src="O60A5433.jpg" alt=""><img src="O60A6899.jpg" alt=""><img src="O60A5501.jpg" alt=""><img src="O60A5521.jpg" alt=""><img src="O60A5525.jpg" alt=""><img src="O60A6901.jpg" alt=""><img src="O60A5567.jpg" alt=""><img src="O60A5579.jpg" alt=""><img src="O60A5721-編輯.jpg" alt=""><img src="66850027.jpg" alt=""><img src="66850033.jpg" alt=""><img src="O60A6870.jpg" alt=""><img src="O60A6917.jpg" alt=""><img src="O60A7004.jpg" alt=""><img src="O60A7065.jpg" alt=""><img src="O60A7091.jpg" alt="">
                 </div>
                 <div class="onomatopoeia text-lg top-3 right-4 rotate-[12deg]" style="text-shadow:none;color:black;opacity:1;">キラキラ</div>
                 <div class="onomatopoeia text-lg bottom-12 left-3 rotate-[-10deg]" style="text-shadow:none;color:black;opacity:1;">ジャーン</div>
@@ -316,9 +312,17 @@
             var guestCards = document.querySelectorAll('.guest-card');
             var guests = [];
 
-            // 驗證餐點
+            // 驗證姓名和餐點是否都有填（僅參加時）
             if (attending === 'yes') {
                 for (var v = 0; v < guestCards.length; v++) {
+                    var checkName = guestCards[v].querySelector('input[type="text"]');
+                    if (!checkName.value.trim()) {
+                        alert('請填寫 GUEST ' + (v + 1) + ' 的姓名！');
+                        submitBtn.disabled = false;
+                        submitBtn.innerHTML = '提交回覆 <span class="text-xs opacity-70">SEND</span>';
+                        checkName.focus();
+                        return;
+                    }
                     var checkMeal = guestCards[v].querySelector('select');
                     if (checkMeal.selectedIndex === 0) {
                         alert('請為 GUEST ' + (v + 1) + ' 選擇餐點！');
@@ -330,13 +334,21 @@
                 }
             }
 
-            // 顯示像素風載入畫面
+            // 顯示載入中彈窗
             var loadingEl = document.createElement('div');
             loadingEl.className = 'loading-overlay';
-            loadingEl.innerHTML = '<div class="pixel-runner">🐉</div>'
-                + '<p style="font-weight:900;font-size:14px;letter-spacing:2px;">送出中</p>'
-                + '<div class="pixel-dots"><span></span><span></span><span></span></div>'
-                + '<div class="pixel-ground"></div>';
+            loadingEl.innerHTML = '<div class="loading-box">'
+                + '<div class="loading-hearts">'
+                + '<span style="animation-delay:0s">♥</span>'
+                + '<span style="animation-delay:0.15s">♥</span>'
+                + '<span style="animation-delay:0.3s">♥</span>'
+                + '<span style="animation-delay:0.45s">♥</span>'
+                + '<span style="animation-delay:0.6s">♥</span>'
+                + '<span style="animation-delay:0.75s">♥</span>'
+                + '</div>'
+                + '<p style="font-weight:900;font-size:16px;">送出中...</p>'
+                + '<p style="font-size:10px;color:#999;margin-top:4px;">Submitting</p>'
+                + '</div>';
             document.body.appendChild(loadingEl);
 
             for (var g = 0; g < guestCards.length; g++) {
@@ -402,16 +414,13 @@
 
         function showSuccessModal() {
             var m = document.createElement('div');
-            m.className = 'fixed inset-0 bg-black/90 flex items-center justify-center z-50 p-6';
-            m.innerHTML = '<div class="bg-white border-8 border-black p-6 text-center max-w-sm">'
-                + '<img src="thanks.jpg" alt="" style="width:100%;border:4px solid black;margin-bottom:12px;">'
+            m.style.cssText = 'position:fixed;inset:0;background:white;z-index:300;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;';
+            m.innerHTML = '<img src="thanks.jpg" alt="" style="width:100%;max-width:380px;border:6px solid black;margin-bottom:20px;">'
                 + '<div class="text-3xl font-black italic mb-3" style="font-family:Noto Sans JP,sans-serif;">ヤッター！</div>'
-                + '<p class="font-black text-lg mb-2 underline underline-offset-8 decoration-4">您的回覆已成功送出！</p>'
-                + '<p class="text-[10px] text-gray-400 font-bold mb-3">Your response has been submitted.</p>'
-                + '<p class="font-bold text-sm text-gray-600 mb-1">感激不盡ヾ(´ε`ヾ)</p>'
-                + '<p class="text-[10px] text-gray-400 font-bold mb-5">Thank you so much!</p>'
-                + '<button onclick="this.closest(\'.fixed\').remove()" class="w-full bg-black text-white py-2 text-sm font-black italic" style="border:3px solid black;">關閉 <span class="text-[10px] opacity-70">CLOSE</span></button>'
-                + '</div>';
+                + '<p class="font-black text-lg mb-2" style="text-decoration:underline;text-underline-offset:8px;text-decoration-thickness:4px;">您的回覆已成功送出！</p>'
+                + '<p style="font-size:10px;color:#999;font-weight:700;margin-bottom:12px;">Your response has been submitted.</p>'
+                + '<p class="font-bold text-sm" style="color:#555;">感激不盡ヾ(´ε`ヾ)</p>'
+                + '<p style="font-size:10px;color:#999;font-weight:700;margin-top:4px;">Thank you so much!</p>';
             document.body.appendChild(m);
         }
     </script>
